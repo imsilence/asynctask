@@ -2,6 +2,7 @@
 #encoding: utf-8
 
 import os
+from ConfigParser import ConfigParser
 
 BASE_PATH = ''
 
@@ -12,13 +13,14 @@ QUEUE_PREFIX = 'uk:silence:asynctask'
 
 LOADED = False
 
+WORKS = {}
+
 def _load_base_config():
     global BASE_PATH
     BASE_PATH = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
 def _load_asynctask_config():
     global REDIS_HOST, REDIS_PORT, QUEUE_PREFIX
-    from ConfigParser import ConfigParser
 
     _parser = ConfigParser()
     _parser.read(os.path.join(BASE_PATH, 'asynctask.conf'))
@@ -30,7 +32,13 @@ def _load_asynctask_config():
 
 
 def _load_work_config():
-    pass
+    global WORKS
+    _parser = ConfigParser()
+    _parser.read(os.path.join(BASE_PATH, 'work.conf'))
+    for _section in _parser.sections():
+        WORKS.setdefault(_section, {})
+	for _option in _parser.options(_section):
+	    WORKS[_section][_option] = _parser.get(_section, _option) 
 
 
 def _load_config():

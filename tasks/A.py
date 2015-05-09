@@ -4,4 +4,5 @@ import time as mtime
 
 def dispatch(time):
     ctime = mtime.time()
+    return None
     return {'ctime': ctime, 'diff': (ctime - time)}
