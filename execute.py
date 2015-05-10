@@ -35,6 +35,7 @@ class Executor(object):
 
 
     def __init__(self, script):
+        print 'create executor:%s' % script
         self._task_client = RedisQueueClient(host=config.REDIS_HOST, \
                                    port=config.REDIS_PORT
                                    )
