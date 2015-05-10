@@ -20,7 +20,7 @@ class Publisher(object):
                                    )
 
     def publish(self, script, script_args={}, task_args={}):
-        key = '%s:%s:in' % (config.QUEUE_PREFIX, script)
+        key = '%s:in' % (config.QUEUE_PREFIX)
         msg = {'id': str(uuid.uuid1()), 'script': script, 'script_args': script_args, 'task_args': task_args}
         logger.debug('put %s to key %s', msg, key)
         self._client.put(msg, key)
