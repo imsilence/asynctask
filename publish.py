@@ -71,19 +71,21 @@ if __name__ == '__main__':
     import time
     prev_time = int(time.time())
     cnt = 0
+    _tasks = {} 
     while 1:
         script = chr(65)
         args = {'time': time.time(), 'x' : random.randint(0, 10), 'y': random.randint(0, 10)}
         _task = p.publish(script, script_args=args, ignore_result=False)
-        while 1:
-            if _task.is_ok():
-                print TaskMapper(_task).as_dict()
-                break
-            time.sleep(1)
+        _tasks[_task.get_id()] = _task
         ctime = int(time.time())        
         cnt += 1
         if prev_time != ctime:
-            print '%s:%s' % (ctime, cnt)
+            _ok_ids = []
+            for _id, _task in _tasks.items():
+                if _task.is_ok():
+                    _ok_ids.append(_id)
+            print '%s:%s:%s' % (ctime, cnt, len(_ok_ids))
+            for _id in _ok_ids:
+                del _tasks[_id]
             cnt = 0
             prev_time = ctime 
-        time.sleep(1)
