@@ -42,11 +42,9 @@ def _load_work_config():
 
 
 def _load_config():
+    global LOADED
     if LOADED:
         return
-
-    global LOADED
-
     _load_base_config()
     _load_asynctask_config() 
     _load_work_config()
