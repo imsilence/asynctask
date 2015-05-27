@@ -43,8 +43,14 @@ class RedisQueueClient(RedisClient):
     def put(self, msg, key, pickle=json):
         return self._connect.lpush(key, pickle.dumps(msg))
 
-    def get(self, key, pickle=json):
-        _result = self._connect.rpop(key)
+    def get(self, key, block=False, timeout=0, pickle=json):
+        _result = None
+        if block:
+            _result = self._connect.brpop(key, timeout)
+            if _result is not None:
+                _result = _result[1]
+        else:
+            _result = self._connect.rpop(key)
         return _result and pickle.loads(_result) or _result
 
     def size(self, key):

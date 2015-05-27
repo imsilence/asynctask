@@ -58,10 +58,9 @@ class Executor(object):
         cnt = 0
         _pid = os.getpid()
         while 1:
-            _task_json = self._task_client.get(self._redis_key_in)
+            _task_json = self._task_client.get(self._redis_key_in, block=False)
             if _task_json is None:
-               time.sleep(0.05)
-               continue
+                continue
  
             _task = Task(**_task_json)
 
